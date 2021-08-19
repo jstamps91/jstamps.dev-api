@@ -1,0 +1,61 @@
+import axios from 'axios'
+import qs from 'querystring'
+import { config } from '../../config'
+import { Logger } from '../../logger'
+import { LastSong } from '../../graphql/schema'
+
+export class LastFMApiService {
+    private readonly baseURL = 'http://ws.audioscrobbler.com/2.0'
+    private readonly logger: Logger
+    private readonly getTrackURL: string
+    private readonly getScrobblesURL: string
+
+    constructor() {
+        this.logger = new Logger('LastFM API')
+
+        this.getTrackURL = this.buildURL({
+            method: 'user.getrecenttracks',
+            user: config.lastFM.username,
+        })
+
+        this.getScrobblesURL = this.buildURL({
+            method: 'user.getinfo',
+            user: config.lastFM.username,
+        })
+    }
+
+    private buildURL(queryOptions: qs.ParsedUrlQuery): string {
+        return `${this.baseURL}/?${qs.stringify({ ...queryOptions, api_key: config.lastFM.apiKey, format: 'json' })}`
+    }
+
+    async getSongListening(): Promise<LastSong | null> {
+        try {
+            const [getTrackResult, getScrobblesResult] = await Promise.all([
+                axios.get(this.getTrackURL),
+                axios.get(this.getScrobblesURL),
+            ])
+            // console.log("Josh ~ file: last-fm.api.ts ~ line 37 ~ LastFMAPI ~ getSongListening ~ getTrackResult", JSON.stringify(getTrackResult.data, null, 3))
+
+            const track = getTrackResult.data['recenttracks']['track']
+            // console.log("Dante ~ file: last-fm.api.ts ~ line 40 ~ LastFMAPI ~ getSongListening ~ track", track)
+            const scrobbles = getScrobblesResult.data['user']['playcount']
+            console.log('lastfm scrobbles', scrobbles, typeof scrobbles)
+            const playing = track[0]['@attr'] !== undefined
+            const lastPlayingDate = new Date(parseInt(track?.[0]?.date?.uts, 10) * 1000 || Date())
+
+            return {
+                name: track[0]['name'],
+                artist: track[0]['artist']['#text'],
+                album: track[0]['album']['#text'],
+                url: track[0]['url'],
+                image: track[0]['image'][3]['#text'],
+                playing,
+                scrobbles,
+                lastPlayingDate: lastPlayingDate.toISOString(),
+            }
+        } catch (error) {
+            this.logger.error('Error on get data', error)
+            return null
+        }
+    }
+}
