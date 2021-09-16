@@ -1,8 +1,8 @@
 {
-  "name": "dantecalderon-api",
-  "version": "0.0.1",
+  "name": "jstamps.dev-api",
+  "version": "1.0.1",
   "description": "",
-  "author": "Dante Calderon<mail@dantecalderon.dev>",
+  "author": "Joshua Stampsn<mail@jstamps.dev>",
   "license": "MIT",
   "scripts": {
     "start": "node dist/index.js",

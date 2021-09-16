@@ -3,14 +3,14 @@ import {parseStringPromise} from "xml2js"
 
 export class GoodreadsApiService {
   private axiosInstance: AxiosInstance
-  private readonly userId = '72837965-dante-calder-n'
+  private readonly userId = '140230151-joshua-stamps'
 
   constructor() {
     this.axiosInstance = axios.create()
   }
 
   /**
-   * from rssURL: https://www.goodreads.com/user_status/list/72837965-dante-calder-n?format=rss
+   * from rssURL: https://www.goodreads.com/user_status/list/140230151-joshua-stamps?format=rss
    */
   async lastReading() {
     try {
@@ -30,8 +30,8 @@ export class GoodreadsApiService {
       return {
         title: 'Atomic Habits',
         updatedAt: new Date().toISOString(),
-        url: 'https://www.goodreads.com/user/show/72837965-dante-calder-n',
-        profileUrl: 'https://www.goodreads.com/user/show/72837965-dante-calder-n'
+        url: 'https://www.goodreads.com/review/list/140230151?shelf=currently-reading',
+        profileUrl: 'https://www.goodreads.com/user/show/140230151-joshua-stamps'
       }
     }
   }

@@ -6,7 +6,7 @@ export const config = {
     /** Github */
     github: {
         username: process.env.GITHUB_USERNAME,
-        token: process.env.GITHUB_TOKEN,
+        token: process.env.GITHUB_API_TOKEN,
     },
 
     /** LastFM */

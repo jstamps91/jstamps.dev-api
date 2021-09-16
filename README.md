@@ -1,4 +1,4 @@
-# 🐙 dantecalderon API
+# jstamps.dev site API
 
 My GraphQL API
 
@@ -13,13 +13,13 @@ My GraphQL API
 ### 🚀 Install and Run
 
 ```
-yarn
+npm install
 ```
 
 then 
 
 ```
-yarn dev
+npm run start
 ```
 
 ### ⚖️ License
